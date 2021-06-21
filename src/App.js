@@ -1,25 +1,44 @@
-import logo from './logo.svg';
+import { useState, useEffect } from "react";
+import TemplateviewComponent from "./TemplateviewComponent";
+import Body from './Body';
+import Header from './Header';
+import useFetchTemplates from './useFetchTemplates';
 import './App.css';
 
-function App() {
+
+import axios from "axios";
+
+ function App() {
+    const{jobs,loading,error}=useFetchTemplates();
+    console.log("i am a job",jobs);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
+
+  
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = jobs.slice(indexOfFirstPost,indexOfLastPost);
+  console.log(currentPosts);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <Header/>
+
+{/*loading && <h1 className="loading">Loading.....</h1>}*/}
+
+
+
+              
+
+      {currentPosts.map((currentPost) => (
+        <TemplateviewComponent
+          currentPost={currentPost}
+          key={currentPost.name}
+        />
+      ))}
+
     </div>
   );
 }
-
 export default App;
